@@ -1,1 +1,59 @@
-<h6>I am brand Show</h6>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Phone Showcase</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4 class="text-center py-3">Mobile Brands</h4>
+    <a href="#" onclick="showBrand('Samsung')">Samsung</a>
+    <a href="#" onclick="showBrand('Apple')">Apple</a>
+    <a href="#" onclick="showBrand('Xiaomi')">Xiaomi</a>
+    <a href="#" onclick="showBrand('Motorola')">Motorola</a>
+    <a href="#" onclick="showBrand('Realme')">Realme</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h3 id="brand-title" class="mb-4">Select a Brand</h3>
+    <div id="mobileCards" class="row g-4"></div>
+  </div>
+
+  <!-- Modal for Mobile Details -->
+  <div class="modal fade" id="mobileDetailsModal" tabindex="-1" aria-labelledby="mobileDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="mobileDetailsModalLabel">Mobile Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img id="modalImage" src="" alt="Mobile Image" class="img-fluid mb-3">
+          <h5 id="modalName"></h5>
+          <p id="modalPrice"></p>
+          <p id="modalDescription"></p>
+          <ul>
+            <li><strong>Back Camera:</strong> <span id="modalBackCamera"></span></li>
+            <li><strong>Front Camera:</strong> <span id="modalFrontCamera"></span></li>
+            <li><strong>RAM:</strong> <span id="modalRam"></span></li>
+            <li><strong>ROM:</strong> <span id="modalRom"></span></li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="addToCart()">Add to Cart</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/javascript/app.js"></script>
+</body>
+</html>

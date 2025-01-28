@@ -74,25 +74,76 @@ function loadPage(page) {
       });
   }
 
-const mobileCardsContainer = document.getElementById("mobileCards");
+// Cart array
+let cart = [];
 
-mobilePhones.forEach((phone) => {
-  const card = document.createElement("div");
-  card.className = "col-md-4";
+// Function to display phones by brand
+function showBrand(brand) {
+  const filteredPhones = mobilePhones.filter(phone => phone.brand === brand);
+  const mobileCardsContainer = document.getElementById("mobileCards");
+  const brandTitle = document.getElementById("brand-title");
 
-  card.innerHTML = `
-    <div class="card h-100 shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">${phone.brand} - ${phone.model}</h5>
-        <p class="card-text"><strong>Price:</strong> $${phone.price}</p>
-        <p class="card-text"><strong>Back Camera:</strong> ${phone.backCamera}</p>
-        <p class="card-text"><strong>Front Camera:</strong> ${phone.frontCamera}</p>
-        <p class="card-text"><strong>RAM:</strong> ${phone.ram}</p>
-        <p class="card-text"><strong>ROM:</strong> ${phone.rom}</p>
-        <p class="card-text">${phone.description}</p>
+  // Update the brand title
+  brandTitle.textContent = `${brand} Phones`;
+
+  // Clear existing cards
+  mobileCardsContainer.innerHTML = "";
+
+  // Create cards dynamically
+  filteredPhones.forEach((phone, index) => {
+    const card = document.createElement("div");
+    card.className = "col-md-4";
+
+    card.innerHTML = `
+      <div class="card h-100 shadow-sm" onclick="openModal(${index})">
+        <img src="${phone.image}" class="card-img-top" alt="${phone.model}">
+        <div class="card-body">
+          <h5 class="card-title">${phone.model}</h5>
+          <p class="card-text"><strong>Price:</strong> $${phone.price}</p>
+        </div>
       </div>
-    </div>
-  `;
+    `;
 
-  mobileCardsContainer.appendChild(card);
-});
+    mobileCardsContainer.appendChild(card);
+  });
+}
+
+// Function to open the modal and display details
+function openModal(index) {
+  const phone = mobilePhones[index];
+
+  document.getElementById("modalImage").src = phone.image;
+  document.getElementById("modalName").textContent = phone.model;
+  document.getElementById("modalPrice").textContent = `Price: $${phone.price}`;
+  document.getElementById("modalDescription").textContent = phone.description;
+  document.getElementById("modalBackCamera").textContent = phone.backCamera;
+  document.getElementById("modalFrontCamera").textContent = phone.frontCamera;
+  document.getElementById("modalRam").textContent = phone.ram;
+  document.getElementById("modalRom").textContent = phone.rom;
+
+  // Store the currently selected phone index
+  document.getElementById("mobileDetailsModal").setAttribute("data-selected-index", index);
+
+  const modal = new bootstrap.Modal(document.getElementById("mobileDetailsModal"));
+  modal.show();
+}
+
+// Function to add a mobile to the cart
+function addToCart() {
+  const modal = document.getElementById("mobileDetailsModal");
+  const selectedIndex = modal.getAttribute("data-selected-index");
+  const phone = mobilePhones[selectedIndex];
+
+  // Add phone details to the cart
+  cart.push({
+    name: phone.model,
+    price: phone.price,
+    image: phone.image
+  });
+
+  console.log("Cart:", cart);
+
+  // Close the modal
+  const bootstrapModal = bootstrap.Modal.getInstance(modal);
+  bootstrapModal.hide();
+}
