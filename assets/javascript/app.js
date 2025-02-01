@@ -147,3 +147,98 @@ function addToCart() {
   const bootstrapModal = bootstrap.Modal.getInstance(modal);
   bootstrapModal.hide();
 }
+
+// Utility function to convert strings like "50MP" to number (50)
+function parseNumber(value) {
+  return parseInt(value.replace(/\D/g, '')); // Remove non-digit characters and convert to integer
+}
+
+// Perform search and display results
+function performSearch() {
+  // Get filter values
+  const brand = document.getElementById("brandInput").value.toLowerCase();
+  const model = document.getElementById("modelInput").value.toLowerCase();
+
+  const priceRange = document.getElementById("priceSlider").noUiSlider.get();
+  const backCameraRange = document.getElementById("backCameraSlider").noUiSlider.get();
+  const frontCameraRange = document.getElementById("frontCameraSlider").noUiSlider.get();
+  const ramRange = document.getElementById("ramSlider").noUiSlider.get();
+  const romRange = document.getElementById("romSlider").noUiSlider.get();
+
+  // Filter the dataset
+  const filteredPhones = mobilePhones.filter(phone => {
+    const matchesBrand = !brand || phone.brand.toLowerCase().includes(brand);
+    const matchesModel = !model || phone.model.toLowerCase().includes(model);
+    const matchesPrice = phone.price >= parseFloat(priceRange[0]) && phone.price <= parseFloat(priceRange[1]);
+
+    const matchesBackCamera = parseNumber(phone.backCamera) >= parseFloat(backCameraRange[0]) && parseNumber(phone.backCamera) <= parseFloat(backCameraRange[1]);
+    const matchesFrontCamera = parseNumber(phone.frontCamera) >= parseFloat(frontCameraRange[0]) && parseNumber(phone.frontCamera) <= parseFloat(frontCameraRange[1]);
+    
+    const matchesRAM = parseNumber(phone.ram) >= parseFloat(ramRange[0]) && parseNumber(phone.ram) <= parseFloat(ramRange[1]);
+    const matchesROM = parseNumber(phone.rom) >= parseFloat(romRange[0]) && parseNumber(phone.rom) <= parseFloat(romRange[1]);
+
+    return matchesBrand && matchesModel && matchesPrice && matchesBackCamera && matchesFrontCamera && matchesRAM && matchesROM;
+  });
+
+  // Display results
+  displayResults(filteredPhones);
+}
+
+// Display results in the #searchResults container
+function displayResults(mobilePhones) {
+  const resultsContainer = document.getElementById("searchResults");
+  resultsContainer.innerHTML = ""; // Clear previous results
+
+  if (mobilePhones.length === 0) {
+    resultsContainer.innerHTML = `<p class="text-center">No results found</p>`;
+    return;
+  }
+
+  mobilePhones.forEach(phone => {
+    const phoneCard = `
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">${phone.brand} ${phone.model}</h5>
+            <p class="card-text">
+              Price: $${phone.price} <br>
+              Back Camera: ${phone.backCamera} <br>
+              Front Camera: ${phone.frontCamera} <br>
+              RAM: ${phone.ram} <br>
+              ROM: ${phone.rom} <br>
+              Description: ${phone.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+    resultsContainer.innerHTML += phoneCard;
+  });
+}
+
+function renderCart() {
+  let cartHTML = "";
+  let totalPrice = 0;
+  
+  cart.forEach(item => {
+      let itemTotal = item.price;
+      totalPrice += itemTotal;
+      cartHTML += `
+          <div class="cart-item">
+              <img src="${item.image}" alt="${item.name}">
+              <div>
+                  <strong>${item.name}</strong> <br>
+                  <span class="item-details">Brand: ${item.brand}</span> <br>
+                  <span class="item-price">Price: $${item.price}</span> <br>
+                  <span>Quantity: ${item.quantity}</span>
+              </div>
+              <div class="item-price">$${itemTotal}</div>
+          </div>
+      `;
+      
+  });
+  document.getElementById("cart").innerHTML = cartHTML;
+  document.getElementById("total-price").textContent = totalPrice;
+}
+console.log(cartHTML);
+renderCart();

@@ -3,10 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mobile Showroom</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: calc(20% - 10px);
+            box-sizing: border-box;
+        }
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .card p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .see-more {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .see-more:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div id="mobileCards" class="row g-4"></div>
-    <script src="../assets/javascript/app.js"></script>
+    <div class="container" id="mobile-showroom">
+        <!-- Rows will be dynamically inserted here -->
+    </div>
+    <script>
+        const mobilePhones = [
+            { brand: "Samsung", model: "Galaxy S23", price: 799, image: "https://via.placeholder.com/150" },
+            { brand: "Samsung", model: "Galaxy A54", price: 449, image: "https://via.placeholder.com/150" },
+            { brand: "Samsung", model: "Galaxy M14", price: 199, image: "https://via.placeholder.com/150" },
+            { brand: "Samsung", model: "Galaxy Z Fold 5", price: 1799, image: "https://via.placeholder.com/150" },
+            { brand: "Samsung", model: "Galaxy Z Flip 5", price: 999, image: "https://via.placeholder.com/150" },
+
+            { brand: "Apple", model: "iPhone 14", price: 799, image: "https://via.placeholder.com/150" },
+            { brand: "Apple", model: "iPhone 14 Pro", price: 999, image: "https://via.placeholder.com/150" },
+            { brand: "Apple", model: "iPhone 14 Plus", price: 899, image: "https://via.placeholder.com/150" },
+            { brand: "Apple", model: "iPhone 14 Pro Max", price: 1099, image: "https://via.placeholder.com/150" },
+            { brand: "Apple", model: "iPhone SE 2022", price: 429, image: "https://via.placeholder.com/150" },
+
+            { brand: "Xiaomi", model: "Redmi Note 12 Pro", price: 399, image: "https://via.placeholder.com/150" },
+            { brand: "Xiaomi", model: "Redmi Note 12", price: 249, image: "https://via.placeholder.com/150" },
+            { brand: "Xiaomi", model: "Mi 13", price: 899, image: "https://via.placeholder.com/150" },
+            { brand: "Xiaomi", model: "Redmi 12C", price: 149, image: "https://via.placeholder.com/150" },
+            { brand: "Xiaomi", model: "Redmi Note 11 Pro", price: 349, image: "https://via.placeholder.com/150" },
+
+            { brand: "Motorola", model: "Moto Edge 40 Pro", price: 899, image: "https://via.placeholder.com/150" },
+            { brand: "Motorola", model: "Moto G73", price: 299, image: "https://via.placeholder.com/150" },
+            { brand: "Motorola", model: "Moto G Power 2023", price: 249, image: "https://via.placeholder.com/150" },
+            { brand: "Motorola", model: "Moto G Stylus 5G", price: 399, image: "https://via.placeholder.com/150" },
+            { brand: "Motorola", model: "Moto E13", price: 129, image: "https://via.placeholder.com/150" },
+
+            { brand: "Realme", model: "Realme GT Neo 5", price: 449, image: "https://via.placeholder.com/150" },
+            { brand: "Realme", model: "Realme Narzo 60", price: 299, image: "https://via.placeholder.com/150" },
+            { brand: "Realme", model: "Realme C55", price: 199, image: "https://via.placeholder.com/150" },
+            { brand: "Realme", model: "Realme 11 Pro+", price: 399, image: "https://via.placeholder.com/150" },
+            { brand: "Realme", model: "Realme GT 2", price: 549, image: "https://via.placeholder.com/150" }
+        ];
+
+        const brands = [...new Set(mobilePhones.map(phone => phone.brand))];
+
+        const container = document.getElementById('mobile-showroom');
+
+        brands.forEach(brand => {
+            const brandRow = document.createElement('div');
+            const brandHeading = document.createElement('h2');
+            brandHeading.textContent = brand;
+
+            const cardRow = document.createElement('div');
+            cardRow.className = 'card-row';
+
+            const brandMobiles = mobilePhones.filter(phone => phone.brand === brand).slice(0, 5);
+
+            brandMobiles.forEach(mobile => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src ="../assets/images/${mobile.model}.jpeg">
+                    <h3>${mobile.model}</h3>
+                    <p>Price: $${mobile.price}</p>
+                `;
+                cardRow.appendChild(card);
+            });
+
+            const seeMoreButton = document.createElement('a');
+            seeMoreButton.className = 'see-more';
+            seeMoreButton.href = `#${brand.toLowerCase()}-showroom`;
+            seeMoreButton.textContent = 'See More';
+
+            brandRow.appendChild(brandHeading);
+            brandRow.appendChild(cardRow);
+            brandRow.appendChild(seeMoreButton);
+
+            container.appendChild(brandRow);
+        });
+    </script>
 </body>
 </html>
